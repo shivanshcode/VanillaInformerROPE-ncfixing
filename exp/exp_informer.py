@@ -156,6 +156,7 @@ class Exp_Informer(Exp_Basic):
                 model_optim.zero_grad()
                 pred, true = self._process_one_batch(
                     train_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
+                print(f'predict: {pred.shape},     true: {true.shape}', flush=True)
                 loss = criterion(pred, true)
                 # Calculating loss on the first element of faithful vector. Note however that the training will be done on total loss over the faithful vector.
                 actual_loss = criterion(pred[:,:,:1], true[:,:,:1])
