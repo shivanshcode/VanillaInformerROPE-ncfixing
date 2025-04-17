@@ -136,6 +136,7 @@ class Exp_Informer(Exp_Basic):
         time_now = time.time()
         
         train_steps = len(train_loader)
+        print(f'Train Steps: {train_steps}', flush=True)
         early_stopping = EarlyStopping(patience=self.args.patience, verbose=True)
         
         model_optim = self._select_optimizer()
