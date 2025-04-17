@@ -460,6 +460,8 @@ class DataEmbedding(nn.Module):
         self.dropout = nn.Dropout(p=dropout)
 
     def forward(self, x, x_mark):
+        # Modification to x: [B, N, C*(M_eff +1)] -> [B, N*C, M_eff +1]
+        x = x.reshape(x.shape[0], -1, int(x.shape[2]/7))
         #print(f'{x.size()}    Original', flush=True)
         x = self.value_embedding(x)
         #print(f'{x.size()}    Value Embedded', flush=True)
