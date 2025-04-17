@@ -118,7 +118,7 @@ class Exp_Informer(Exp_Basic):
                 vali_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
             #loss = criterion(pred.detach().cpu(), true.detach().cpu())
             # Assuming Faithful vector representation, loss becomes loss wrt to the first element of the faithful vector.
-            loss = criterion(pred[:,:,:1].detach().cpu(), true[:,:,:1].detach().cpu())
+            loss = criterion(pred[:,:,::self.args.c_out].detach().cpu(), true[:,:,::self.args.c_out].detach().cpu())
             total_loss.append(loss)
         total_loss = np.average(total_loss)
         self.model.train()
@@ -159,7 +159,7 @@ class Exp_Informer(Exp_Basic):
                 print(f'predict: {pred.shape},     true: {true.shape}', flush=True)
                 loss = criterion(pred, true)
                 # Calculating loss on the first element of faithful vector. Note however that the training will be done on total loss over the faithful vector.
-                actual_loss = criterion(pred[:,:,:1], true[:,:,:1])
+                actual_loss = criterion(pred[:,:,::self.args.c_out], true[:,:,::self.args.c_out])
                 
                 #print(f'{loss.item()}', flush=True)
                 train_loss.append(loss.item())
@@ -213,8 +213,8 @@ class Exp_Informer(Exp_Basic):
             pred, true = self._process_one_batch(
                 test_data, batch_x, batch_y, batch_x_mark, batch_y_mark)
             # Changed here as well; assuming faithful vector representation of the data file [nc, m_eff+1]
-            preds.append(pred[:,:,:1].detach().cpu().numpy())
-            trues.append(true[:,:,:1].detach().cpu().numpy())
+            preds.append(pred[:,:,::self.args.c_out].detach().cpu().numpy())
+            trues.append(true[:,:,::self.args.c_out].detach().cpu().numpy())
 
         preds = np.array(preds)
         trues = np.array(trues)
